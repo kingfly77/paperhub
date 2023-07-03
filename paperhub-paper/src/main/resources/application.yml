@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: paperhub-paper
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:18848
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://172.27.125.4:3306/paperhub_paper?useSSL=true&enabledTLSProtocols=TLSv1.2&useUnicode=true&characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    host: 172.27.125.4
+    port: 6379
+server:
+  port: 20002
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*.xml
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+
+logging:
+  level:
+    com.fly.paperhub: debug
+

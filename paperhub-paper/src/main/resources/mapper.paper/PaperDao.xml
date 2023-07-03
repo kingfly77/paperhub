@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fly.paperhub.paper.dao.PaperDao">
+
+    <resultMap type="com.fly.paperhub.paper.entity.PaperEntity" id="paperMap">
+        <result property="pid" column="pid"/>
+        <result property="title" column="title"/>
+        <result property="authors" column="authors"/>
+        <result property="year" column="year"/>
+        <result property="publishedIn" column="published_in"/>
+        <result property="uploadUid" column="upload_uid"/>
+        <result property="uploadUname" column="upload_uname"/>
+        <result property="uploadDate" column="upload_date"/>
+        <result property="description" column="description"/>
+        <result property="exist" column="exist"/>
+        <result property="url" column="url"/>
+    </resultMap>
+
+<!--    <select id="selectPasswordByUsername" resultType="java.lang.String">-->
+<!--        select password from user where username = #{username} and exist = 1-->
+<!--    </select>-->
+
+
+</mapper>

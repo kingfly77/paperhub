@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: paperhub-thirdparty
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:18848
+  redis:
+    host: 172.27.125.4
+    port: 6379
+
+server:
+  port: 20003
+
+logging:
+  level:
+    com.fly.paperhub: debug
+

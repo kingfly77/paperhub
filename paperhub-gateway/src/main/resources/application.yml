@@ -1,0 +1,16 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: user_route
+          uri: lb://paperhub-user
+          predicates:
+            - Path=/user/**
+        - id: paper_route
+          uri: lb://paperhub-paper
+          predicates:
+            - Path=/paper/**
+        - id: third-party
+          uri: lb://paperhub-thirdparty
+          predicates:
+            - Path=/oss/**
