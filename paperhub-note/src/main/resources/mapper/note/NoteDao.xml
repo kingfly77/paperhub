@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fly.paperhub.note.dao.NoteDao">
+
+    <resultMap type="com.fly.paperhub.note.entity.NoteEntity" id="noteMap">
+        <result property="pid" column="pid"/>
+        <result property="uid" column="uid"/>
+        <result property="text" column="text"/>
+        <result property="html" column="html"/>
+        <result property="exist" column="exist"/>
+    </resultMap>
+    <insert id="saveOrUpdateById" >
+        <selectKey keyProperty="count" resultType="int" order="BEFORE">
+            select COUNT(*) from note where pid = #{pid} and uid = #{uid}
+        </selectKey>
+        <if test="count > 0">
+            update note
+            set text = #{text}, html = #{html}
+            where pid = #{pid} and uid = #{uid}
+        </if>
+        <if test="count==0">
+            insert into note(pid,uid,text,html) values(#{pid},#{uid},#{text},#{html})
+        </if>
+    </insert>
+
+</mapper>

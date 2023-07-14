@@ -1,16 +1,16 @@
 package com.fly.paperhub.thirdparty.controller;
 
-import com.aliyun.oss.ClientException;
-import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClientBuilder;
-import com.aliyun.oss.OSSException;
+import com.aliyun.oss.*;
+import com.aliyun.oss.common.auth.CredentialsProviderFactory;
+import com.aliyun.oss.common.auth.EnvironmentVariableCredentialsProvider;
+import com.aliyun.oss.model.GeneratePresignedUrlRequest;
+import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.aliyun.oss.model.PutObjectResult;
 import io.netty.handler.codec.base64.Base64;
 import jdk.internal.util.xml.impl.Input;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.util.Bytes;
-import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -19,11 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -53,6 +51,41 @@ public class OssController {
         log.debug("endpoint: " + endpoint);
         String uuid = UUID.randomUUID().toString();
         String save_path = "papers/" + uuid + ".pdf";
+
+//        // sign url
+//        // 创建OSSClient实例。
+//        OSS ossClient = new OSSClientBuilder().build("https://" + endpoint, accessKeyId, accessKeySecret);
+//        try {
+//            // 设置样式，样式中包含文档预览参数。
+////            String style = "imm/previewdoc,copy_1";
+//            // 超时时间
+//            Date expiration = new Date(new Date().getTime() + 1000 * 60 * 10 );
+//            GeneratePresignedUrlRequest req = new GeneratePresignedUrlRequest(bucket, save_path, HttpMethod.GET);
+//
+//            req.setExpiration(expiration);
+////            req.setProcess(style);
+//
+//            URL url = ossClient.generatePresignedUrl(req);
+//            System.out.println(url);
+//        } catch (OSSException oe) {
+//            System.out.println("Caught an OSSException, which means your request made it to OSS, "
+//                    + "but was rejected with an error response for some reason.");
+//            System.out.println("Error Message:" + oe.getErrorMessage());
+//            System.out.println("Error Code:" + oe.getErrorCode());
+//            System.out.println("Request ID:" + oe.getRequestId());
+//            System.out.println("Host ID:" + oe.getHostId());
+//        } catch (ClientException ce) {
+//            System.out.println("Caught an ClientException, which means the client encountered "
+//                    + "a serious internal problem while trying to communicate with OSS, "
+//                    + "such as not being able to access the network.");
+//            System.out.println("Error Message:" + ce.getMessage());
+//        } finally {
+//            if (ossClient != null) {
+//                ossClient.shutdown();
+//            }
+//        }
+//        return null;
+
         String url = "https://" + bucket + "." + endpoint + "/" + save_path;
         Map<String, Object> ret = new HashMap<>();
         ret.put("code", 200);
@@ -95,7 +128,7 @@ public class OssController {
         try {
             // 创建PutObjectRequest对象。
             String save_path = "papers/" + uuid + ".pdf";
-            PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, save_path, inputStream);
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, save_path, inputStream, new ObjectMetadata());
             // 设置该属性可以返回response。如果不设置，则返回的response为空。
             putObjectRequest.setProcess("true");
             // 创建PutObject请求。
@@ -104,6 +137,8 @@ public class OssController {
             System.out.println(result.getResponse().getStatusCode());
 
             data.put("success", true);
+
+            log.debug(result.getResponse().getHttpResponse().toString());
 
         } catch (OSSException oe) {
             String errorMsg = "Caught an OSSException, which means your request made it to OSS, "

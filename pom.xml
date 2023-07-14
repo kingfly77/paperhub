@@ -35,6 +35,8 @@
         <module>paperhub-user</module>
         <module>paperhub-paper</module>
         <module>paperhub-thirdparty</module>
+        <module>common</module>
+        <module>paperhub-note</module>
     </modules>
 
 

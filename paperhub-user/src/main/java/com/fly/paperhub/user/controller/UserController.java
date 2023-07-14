@@ -3,14 +3,17 @@ package com.fly.paperhub.user.controller;
 import com.fly.paperhub.user.entity.UserEntity;
 import com.fly.paperhub.user.service.UserService;
 import javafx.util.Pair;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @RestController
 @RequestMapping("user/user")
 public class UserController {
@@ -101,6 +104,22 @@ public class UserController {
             data.put("fail_reason", failReason);
         }
 
+        return data;
+    }
+
+    @RequestMapping("/getUserIdNameMapByIds")
+    public Map<String, Object> getUserIdNameMapByIds(@RequestBody Map<String, Object> params) {
+        List<Long> idList = (List<Long>) params.get("idList");
+        List<UserEntity> userList = userService.listByIds(idList);
+        Map<Long, String> idNameMap = new HashMap<>();
+        userList.forEach(user -> {
+            idNameMap.put(user.getUid(), user.getUsername());
+        });
+        for (Long k: idNameMap.keySet()) {
+            log.debug("idNameMap: " + k + " -> " + idNameMap.get(k));
+        }
+        Map<String, Object> data = new HashMap<>();
+        data.put("idNameMap", idNameMap);
         return data;
     }
 }

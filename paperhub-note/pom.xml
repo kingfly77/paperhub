@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.fly.paperhub</groupId>
-    <artifactId>paperhub-paper</artifactId>
+    <artifactId>paperhub-note</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>paperhub-paper</name>
-    <description>paperhub-paper</description>
+    <name>paperhub-note</name>
+    <description>paperhub-note</description>
     <properties>
         <java.version>8</java.version>
         <spring-cloud.version>2021.0.6</spring-cloud.version>

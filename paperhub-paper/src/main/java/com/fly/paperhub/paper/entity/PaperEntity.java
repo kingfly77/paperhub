@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.Date;
 
 @Data
 @TableName("paper")
@@ -31,7 +32,8 @@ public class PaperEntity {
     @NotNull
     private String uploadUname;
 
-    private String uploadDate;
+    @NotNull
+    private Date uploadDate;
 
     private String description;
 

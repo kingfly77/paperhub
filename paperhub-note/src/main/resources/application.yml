@@ -1,6 +1,6 @@
 spring:
   application:
-    name: paperhub-user
+    name: paperhub-note
   cloud:
     nacos:
       discovery:
@@ -8,13 +8,13 @@ spring:
   datasource:
     username: root
     password: root
-    url: jdbc:mysql://172.27.125.4:3306/paperhub_user?useSSL=true&enabledTLSProtocols=TLSv1.2&useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://172.27.125.4:3306/paperhub_note?useSSL=true&enabledTLSProtocols=TLSv1.2&useUnicode=true&characterEncoding=UTF-8
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     host: 172.27.125.4
     port: 6379
 server:
-  port: 20001
+  port: 20004
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml

@@ -14,3 +14,7 @@ spring:
           uri: lb://paperhub-thirdparty
           predicates:
             - Path=/oss/**
+        - id: note_route
+          uri: lb://paperhub-note
+          predicates:
+            - Path=/note/**
