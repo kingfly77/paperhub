@@ -1,11 +1,14 @@
 package com.fly.paperhub.note.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.fly.paperhub.common.constants.RedisKeys;
+import com.fly.paperhub.common.utils.StringUtil;
 import com.fly.paperhub.note.entity.NoteEntity;
 import com.fly.paperhub.note.service.NoteService;
 import com.fly.paperhub.note.vo.NoteVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -23,7 +26,9 @@ public class NoteController {
 
     @RequestMapping("/getNote")
     public Map<String, Object> getNote(@RequestParam("pid") Long pid, @RequestParam("uid") Long uid) {
+
         NoteEntity note = noteService.getNoteById(pid, uid);
+
         if (note == null) {
             System.out.println("note is null!");
         }

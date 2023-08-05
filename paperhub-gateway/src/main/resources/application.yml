@@ -2,19 +2,37 @@ spring:
   cloud:
     gateway:
       routes:
+        # user
         - id: user_route
           uri: lb://paperhub-user
           predicates:
             - Path=/user/**
+        # paper
         - id: paper_route
           uri: lb://paperhub-paper
           predicates:
             - Path=/paper/**
+#          filters:
+#            - TokenFilter
+        # third party
         - id: third-party
           uri: lb://paperhub-thirdparty
           predicates:
             - Path=/oss/**
+          filters:
+            - TokenFilter
+        # note
         - id: note_route
           uri: lb://paperhub-note
           predicates:
             - Path=/note/**
+          filters:
+            - TokenFilter
+
+  redis:
+    host: 172.27.125.4
+    port: 6379
+
+logging:
+  level:
+    com.fly.paperhub: debug

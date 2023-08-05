@@ -46,7 +46,7 @@ public class UserController {
         String token = userService.createToken(user);
 
         // save token in redis
-        redisTemplate.opsForValue().set(token, "", 30, TimeUnit.DAYS);
+        redisTemplate.opsForValue().set(token, "", 1, TimeUnit.DAYS);
 
         // response
         Map<String, Object> data = new HashMap<>();

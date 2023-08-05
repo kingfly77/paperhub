@@ -7,6 +7,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fly.paperhub.common.constants.RedisKeys;
+import com.fly.paperhub.common.utils.StringUtil;
 import com.fly.paperhub.user.dao.UserDao;
 import com.fly.paperhub.user.entity.UserEntity;
 import com.fly.paperhub.user.service.UserService;
@@ -15,6 +17,7 @@ import com.sun.org.apache.xpath.internal.operations.Bool;
 import javafx.util.Pair;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -29,6 +32,9 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public UserEntity getUserByName(String username) {
@@ -62,11 +68,12 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
                 .withClaim("profile", user.getProfile())
                 .sign(Algorithm.HMAC256("fly"));
 
-        return "paperhub_login_token_" + token;
+        return StringUtil.connect(RedisKeys.CONNECTOR, RedisKeys.TOKEN_PREFIX, token);
     }
 
     public UserEntity decodeToken(String token) {
-        token = token.replace("paperhub_login_token_", "");
+        // TODO: get user info from redis
+        token = token.replace(RedisKeys.TOKEN_PREFIX + RedisKeys.CONNECTOR, "");
         DecodedJWT decodedJWT = JWT.decode(token);
         Claim uid = decodedJWT.getClaim("uid");
         Claim username = decodedJWT.getClaim("username");
